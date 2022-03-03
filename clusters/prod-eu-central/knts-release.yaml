@@ -1,0 +1,45 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: knts-operator
+  namespace: flux-system
+spec:
+  chart:
+    spec:
+      chart: knts-operator
+      sourceRef:
+        kind: HelmRepository
+        name: knts-operator
+      version: 0.2.21
+  install:
+    createNamespace: true
+  interval: 10s
+  releaseName: knts-operator
+  targetNamespace: knts-operator
+  values:
+    replicaCount: 1
+    mysql:
+      rootpassword: "byyM2AkKmEH9x"
+      storage: "500Gi"
+      hostname: "mysql.knts-operator"
+      username: "root"
+      password: "byyM2AkKmEH9x"
+
+    image:
+      repository: gcr.io/klusternetes-prod/knts-operator
+      pullPolicy: IfNotPresent
+      tag: "v0.2.18"
+
+    registry:
+      secret: regcred
+
+    imagePullSecrets: []
+    nameOverride: ""
+    fullnameOverride: ""
+
+    credentials:
+      username: klusternetes+europe-nuremberg-1@knts.app
+      password: abc123456xyz
+
+    cluster:
+      id: europe-nuremberg-1
